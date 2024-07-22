@@ -1,0 +1,74 @@
+#
+# This file configures the New Relic Agent.
+#
+# yamllint disable-line rule:line-length
+# (Java agent configuration at: https://docs.newrelic.com/docs/apm/agents/java-agent/configuration/java-agent-configuration-config-file)
+#
+
+common: &default_settings
+
+  license_key: ${NEW_RELIC_LICENSE_KEY}
+  app_name: ${NEW_RELIC_APP_NAME}
+
+  agent_enabled: true
+
+  monitor_mode: true
+  developer_mode: false
+
+  # yamllint disable-line rule:truthy
+  log_level: debug
+  log_file_name: STDOUT
+
+  ssl: true
+
+  capture_params: true
+
+  transaction_tracer:
+    enabled: true
+    transaction_threshold: apdex_f
+    record_sql: obfuscated
+    stack_trace_threshold: 1
+    explain_enabled: true
+    explain_threshold: 1
+
+  error_collector:
+    enabled: true
+
+  enable_custom_tracing: true
+
+  class_transformer:
+    # Disable NR agent collect metrics due to incompatible with http4s 0.23.x
+#    "com.newrelic.instrumentation.http4s-blaze-server-2.13_0.23":
+#      enabled: false
+    # "com.newrelic.instrumentation.jdbc-socket-jdk21":
+    #   enabled: false
+    # "com.newrelic.instrumentation.httpurlconnection":
+    #   enabled: false
+    # "com.newrelic.instrumentation.java.completable-future-jdk11":
+    #   enabled: false
+    # "com.newrelic.instrumentation.java.process":
+    #   enabled: false
+    # "com.newrelic.instrumentation.java.logging-jdk8":
+    #   enabled: false
+    # "com.newrelic.instrumentation.jdbc-generic":
+    #   enabled: false
+    # "com.newrelic.instrumentation.jdbc-driver":
+    #   enabled: false
+    # "com.newrelic.instrumentation.hikaricp-2.4.0":
+    #   enabled: false
+    # "com.newrelic.instrumentation.logback-classic-1.2":
+    #   enabled: false
+    # "com.newrelic.instrumentation.jdbc-postgresql-9.4.1208":
+    #   enabled: false
+development:
+  <<: *default_settings
+  monitor_mode: false
+  developer_mode: true
+
+dev:
+  <<: *default_settings
+  monitor_mode: false
+
+production:
+  <<: *default_settings
+  monitor_mode: true
